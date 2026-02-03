@@ -1,0 +1,98 @@
+<div class="container">
+  <h1>Gestión de Matrícula Vehicular</h1>
+  <hr>
+
+    <h3>Vehículos Registrados</h3>
+
+    <div class="search-bar" style="margin-bottom: 15px; display: flex; gap: 10px;">
+    <input 
+        type="text" 
+        [(ngModel)]="placaBusqueda" 
+        placeholder="Buscar por placa..." 
+        style="padding: 8px; width: 200px;"
+    />
+    <button (click)="buscar()" style="padding: 8px 15px;">Buscar</button>
+    
+    <button (click)="placaBusqueda=''; buscar()" style="background: #666;">Limpiar</button>
+    </div>
+
+    <div class="table-responsive">
+    <table class="table-vehiculos">
+        </table>
+    </div>
+
+  <div class="card-form">
+    <h3>Registro de Vehículo</h3>
+    
+    <div class="form-group">
+      <label>Placa (Ej: AAA-1234):</label>
+      <input [(ngModel)]="nuevoVehiculo.placa" placeholder="Debe tener guion en 4ta posición" />
+    </div>
+    
+    <div class="form-group">
+      <label>Propietario:</label>
+      <input [(ngModel)]="nuevoVehiculo.propietario" />
+    </div>
+    
+    <div class="form-group">
+      <label>Marca:</label>
+      <input [(ngModel)]="nuevoVehiculo.marca" />
+    </div>
+    
+    <div class="form-group">
+      <label>Año Fabricación:</label>
+      <input type="number" [(ngModel)]="nuevoVehiculo.fabricacion" placeholder="Ej: 2020" />
+    </div>
+    
+    <div class="form-group">
+      <label>Valor Comercial:</label>
+      <input type="number" [(ngModel)]="nuevoVehiculo.valor_comercial" />
+    </div>
+    
+    <div *ngIf="mensajeError" class="error-msg">
+      {{ mensajeError }}
+    </div>
+
+    <button (click)="guardar()">Registrar</button>
+  </div>
+
+  <hr>
+
+  <h3>Vehículos Registrados</h3>
+  
+  <div class="table-responsive">
+    <table class="table-vehiculos">
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Propietario</th>
+          <th>Marca</th>
+          <th>Año</th>
+          <th>Revisión</th>
+          <th>Impuesto</th>
+          <th>Estado</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of vehiculos" 
+            [ngClass]="{'alerta-impuesto': (v.impuesto || 0) > 500}">
+          
+          <td>{{ v.placa }}</td>
+          <td>{{ v.propietario }}</td>
+          <td>{{ v.marca }}</td>
+          <td>{{ v.fabricacion }}</td>
+          <td>{{ v.codigo_revision }}</td>
+          <td>${{ v.impuesto | number:'1.2-2' }}</td>
+          
+          <td class="center-icon">
+            <span *ngIf="(v.impuesto || 0) > 500" title="Impuesto Alto">⚠️</span>
+          </td>
+        </tr>
+
+        <tr *ngIf="vehiculos.length === 0">
+          <td colspan="7" style="text-align: center;">No hay vehículos registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
